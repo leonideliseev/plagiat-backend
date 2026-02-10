@@ -12,30 +12,31 @@ class ObjectKeyFactory(
 ) {
     private val fmt = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss_SSS").withZone(ZoneOffset.UTC)
 
+    private val spaces = Regex("""\s+""")
+    private val forbidden = Regex("""[^\p{L}\p{N}_-]+""")
+    private val manyUnderscores = Regex("""_+""")
+
     fun build(
         taskName: String,
         surnameName: String,
     ): String {
-        val safeTask = sanitizePathPart(taskName)
-        val safeSurnameName = sanitizeFileStem(surnameName)
+        val safeTask = sanitize(taskName)
+        val safeSurnameName = sanitize(surnameName)
         val ts = fmt.format(Instant.now(clock))
-
         return "$safeTask/${safeSurnameName}_$ts.zip"
     }
 
-    private fun sanitizePathPart(s: String?): String = sanitize(s)
+    private fun sanitize(value: String?): String {
+        if (value.isNullOrBlank()) return "unknown"
 
-    private fun sanitizeFileStem(s: String?): String = sanitize(s)
+        val cleaned =
+            value
+                .trim()
+                .replace(spaces, "_")
+                .replace(forbidden, "_")
+                .replace(manyUnderscores, "_")
+                .trim('_')
 
-    private fun sanitize(s: String?): String {
-        if (s.isNullOrBlank()) return "unknown"
-
-        return s
-            .trim()
-            .replace(Regex("\\s+"), "_")
-            .replace(Regex("[^A-Za-z0-9_\\-\\p{IsCyrillic}]"), "_")
-            .replace(Regex("_+"), "_")
-            .trim('_')
-            .ifBlank { "unknown" }
+        return cleaned.ifBlank { "unknown" }
     }
 }
