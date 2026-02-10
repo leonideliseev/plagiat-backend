@@ -1,0 +1,17 @@
+server:
+  port: 8080
+
+spring:
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+
+app:
+  s3:
+    endpoint: http://localhost:9000
+    region: us-east-1
+    accessKey: minioadmin
+    secretKey: minioadmin
+    bucket: plagiat
+    prefix: works
