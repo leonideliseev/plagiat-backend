@@ -23,8 +23,6 @@ services:
       dockerfile: Dockerfile
     container_name: app-server
     depends_on:
-      db:
-        condition: service_healthy
       minio:
         condition: service_healthy
     ports:
