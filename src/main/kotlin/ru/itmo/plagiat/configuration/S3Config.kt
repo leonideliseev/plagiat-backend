@@ -14,26 +14,22 @@ import java.net.URI
 class S3Config(
     private val properties: S3Properties,
 ) {
-    @Bean
+    @Bean(destroyMethod = "close")
     fun s3Client(): S3Client =
         S3Client
             .builder()
-            .apply {
-                endpointOverride(URI.create(properties.endpoint))
-                region(Region.of(properties.region))
-                credentialsProvider(
-                    StaticCredentialsProvider.create(
-                        AwsBasicCredentials.create(properties.accessKey, properties.secretKey),
-                    ),
-                )
-                serviceConfiguration(
-                    S3Configuration
-                        .builder()
-                        .apply {
-                            pathStyleAccessEnabled(true)
-                        }.build(),
-                )
-            }.build()
+            .endpointOverride(URI.create(properties.endpoint))
+            .region(Region.of(properties.region))
+            .credentialsProvider(
+                StaticCredentialsProvider.create(
+                    AwsBasicCredentials.create(properties.accessKey, properties.secretKey),
+                ),
+            ).serviceConfiguration(
+                S3Configuration
+                    .builder()
+                    .pathStyleAccessEnabled(true)
+                    .build(),
+            ).build()
 }
 
 @ConfigurationProperties(prefix = "app.s3")
@@ -42,6 +38,17 @@ data class S3Properties(
     val region: String,
     val accessKey: String,
     val secretKey: String,
-    val bucket: String,
-    val prefix: String,
-)
+    val buckets: Map<String, String>,
+    val prefixes: Map<String, String>,
+    val defaults: Defaults,
+    val autoBucketsCreating: AutoBucketsCreating = AutoBucketsCreating(),
+) {
+    data class Defaults(
+        val bucketKey: String,
+        val prefixKey: String,
+    )
+
+    data class AutoBucketsCreating(
+        val enabled: Boolean = true,
+    )
+}

@@ -6,37 +6,53 @@ import java.time.Instant
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
 
+private const val UNKNOWN_VALUE = "unknown"
+private const val UNDERSCORE = "_"
+private const val ZIP_EXTENSION = ".zip"
+private const val S3_KEY_SEPARATOR = "/"
+private const val TIMESTAMP_PATTERN = "yyyyMMdd_HHmmss_SSS"
+
+private val TIMESTAMP_FORMATTER: DateTimeFormatter =
+    DateTimeFormatter
+        .ofPattern(TIMESTAMP_PATTERN)
+        .withZone(ZoneOffset.UTC)
+
+private val WHITESPACE_REGEX = Regex("""\s+""")
+private val FORBIDDEN_CHARS_REGEX = Regex("""[^\p{L}\p{N}_-]+""")
+private val MULTIPLE_UNDERSCORES_REGEX = Regex("""_+""")
+
 @Component
 class ObjectKeyFactory(
     private val clock: Clock,
 ) {
-    private val fmt = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss_SSS").withZone(ZoneOffset.UTC)
-
-    private val spaces = Regex("""\s+""")
-    private val forbidden = Regex("""[^\p{L}\p{N}_-]+""")
-    private val manyUnderscores = Regex("""_+""")
-
     fun build(
-        taskName: String,
+        prefix: String,
+        workName: String,
         surnameName: String,
     ): String {
-        val safeTask = sanitize(taskName)
-        val safeSurnameName = sanitize(surnameName)
-        val ts = fmt.format(Instant.now(clock))
-        return "$safeTask/${safeSurnameName}_$ts.zip"
+        val sanitizedPrefix = sanitize(prefix)
+        val sanitizedWorkName = sanitize(workName)
+        val sanitizedSurnameName = sanitize(surnameName)
+
+        val timestamp = TIMESTAMP_FORMATTER.format(Instant.now(clock))
+
+        val fileName = sanitizedSurnameName + UNDERSCORE + timestamp + ZIP_EXTENSION
+        val keySegments = listOf(sanitizedPrefix, sanitizedWorkName, fileName)
+
+        return keySegments.joinToString(S3_KEY_SEPARATOR)
     }
 
-    private fun sanitize(value: String?): String {
-        if (value.isNullOrBlank()) return "unknown"
+    private fun sanitize(rawValue: String?): String {
+        if (rawValue.isNullOrBlank()) return UNKNOWN_VALUE
 
-        val cleaned =
-            value
+        val sanitizedValue =
+            rawValue
                 .trim()
-                .replace(spaces, "_")
-                .replace(forbidden, "_")
-                .replace(manyUnderscores, "_")
-                .trim('_')
+                .replace(WHITESPACE_REGEX, UNDERSCORE)
+                .replace(FORBIDDEN_CHARS_REGEX, UNDERSCORE)
+                .replace(MULTIPLE_UNDERSCORES_REGEX, UNDERSCORE)
+                .trim(UNDERSCORE.single())
 
-        return cleaned.ifBlank { "unknown" }
+        return sanitizedValue.ifBlank { UNKNOWN_VALUE }
     }
 }

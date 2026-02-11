@@ -16,13 +16,20 @@ class UploadController(
     private val service: UploadService,
 ) {
     @PostMapping(
-        value = ["/upload/{taskName}"],
+        value = ["/storage/{bucketKey}/{prefixKey}/{workName}/upload"],
         consumes = [MediaType.MULTIPART_FORM_DATA_VALUE],
         produces = [MediaType.APPLICATION_JSON_VALUE],
     )
     fun upload(
-        @PathVariable taskName: String,
+        @PathVariable bucketKey: String,
+        @PathVariable prefixKey: String,
+        @PathVariable workName: String,
         @RequestPart("files") files: List<MultipartFile>,
-    ): List<UploadResponse> = service.uploadTask(taskName =  taskName,
-        files = files)
+    ): List<UploadResponse> =
+        service.uploadWork(
+            workName = workName,
+            files = files,
+            bucketKey = bucketKey,
+            prefixKey = prefixKey,
+        )
 }

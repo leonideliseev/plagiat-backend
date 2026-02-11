@@ -1,17 +1,141 @@
 server:
-  port: 8080
+  port: ${SERVER_PORT:8080}
 
 spring:
   servlet:
     multipart:
-      max-file-size: 50MB
-      max-request-size: 50MB
+      max-file-size: ${SPRING_SERVLET_MULTIPART_MAX_FILE_SIZE:50MB}
+      max-request-size: ${SPRING_SERVLET_MULTIPART_MAX_REQUEST_SIZE:150MB}
 
 app:
   s3:
-    endpoint: http://localhost:9000
-    region: us-east-1
-    accessKey: minioadmin
-    secretKey: minioadmin
-    bucket: plagiat
-    prefix: works
+    endpoint: ${APP_S3_ENDPOINT:http://localhost:9000}
+    region: ${APP_S3_REGION:us-east-1}
+    accessKey: ${APP_S3_ACCESSKEY:minioadmin}
+    secretKey: ${APP_S3_SECRETKEY:minioadmin}
+    buckets:
+      default: ${APP_S3_BUCKET_DEFAULT:plagiat}
+      alt: ${APP_S3_BUCKET_ALT:plagiat-alt}
+    prefixes:
+      works: ${APP_S3_PREFIX_WORKS:works}
+      archive: ${APP_S3_PREFIX_ARCHIVE:archive}
+    defaults:
+      bucketKey: ${APP_S3_DEFAULT_BUCKET_KEY:default}
+      prefixKey: ${APP_S3_DEFAULT_PREFIX_KEY:works}
+    autoBucketsCreating:
+      enabled: ${APP_S3_AUTO_BUCKETS_CREATING_ENABLED:true}
+  zip-cleaner:
+    delete:
+      dirs:
+        - __macosx
+        - .idea
+        - .gradle
+        - target
+        - build
+        - out
+        - bin
+        - dist
+        - node_modules
+        - vendor
+        - pods
+        - deriveddata
+        - .vs
+        - .vscode
+        - .settings
+        - .svn
+        - .hg
+        - .git
+        - __pycache__
+        - .pytest_cache
+        - .mypy_cache
+        - .ruff_cache
+        - .tox
+        - .nox
+        - .ipynb_checkpoints
+        - cmakefiles
+        - cmake-build-*
+      files:
+        - .ds_store
+        - thumbs.db
+        - desktop.ini
+        - .classpath
+        - .project
+        - .gitattributes
+        - .gitmodules
+      extensions:
+        - class
+        - jar
+        - war
+        - ear
+        - exe
+        - dll
+        - so
+        - dylib
+        - o
+        - obj
+        - a
+        - lib
+        - pdb
+        - ilk
+        - idb
+        - pyc
+        - pyo
+        - pyd
+        - zip
+        - rar
+        - 7z
+        - tar
+        - gz
+        - png
+        - jpg
+        - jpeg
+        - gif
+        - webp
+        - bmp
+        - ico
+        - mp3
+        - wav
+        - mp4
+        - mov
+        - avi
+        - pdf
+        - doc
+        - docx
+        - ppt
+        - pptx
+        - log
+        - tmp
+        - temp
+        - bak
+        - swp
+        - swo
+        - swn
+        - orig
+        - rej
+        - old
+        - map
+    keep:
+      only-allowed: true
+      allowed-extensions:
+        - java
+        - kt
+        - kts
+        - py
+        - c
+        - h
+        - cpp
+        - hpp
+        - cc
+        - hh
+        - js
+        - ts
+        - jsx
+        - tsx
+        - go
+        - rs
+        - cs
+        - txt
+        - md
+      special-names:
+        - readme
+        - license

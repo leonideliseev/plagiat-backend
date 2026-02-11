@@ -5,7 +5,9 @@ import org.springframework.web.multipart.MultipartFile
 import ru.itmo.plagiat.configuration.S3Properties
 import ru.itmo.plagiat.dto.exception.InvalidUploadException
 import ru.itmo.plagiat.dto.server.UploadResponse
+import ru.itmo.plagiat.service.helper.BucketProvisioner
 import ru.itmo.plagiat.service.helper.ObjectKeyFactory
+import ru.itmo.plagiat.service.helper.StorageSelector
 import ru.itmo.plagiat.service.helper.UploadValidator
 import ru.itmo.plagiat.service.helper.ZipCleaner
 import ru.itmo.plagiat.util.ERROR_MESSAGE_EMPTY_FILE_LIST
@@ -32,12 +34,22 @@ class UploadService(
     private val objectKeyFactory: ObjectKeyFactory,
     private val uploadValidator: UploadValidator,
     private val zipCleaner: ZipCleaner,
+    private val storageSelector: StorageSelector,
+    private val bucketProvisioner: BucketProvisioner,
 ) {
     fun uploadWork(
         workName: String,
         files: List<MultipartFile>,
+        bucketKey: String?,
+        prefixKey: String?,
     ): List<UploadResponse> {
         if (files.isEmpty()) throw InvalidUploadException(ERROR_MESSAGE_EMPTY_FILE_LIST)
+
+        val storageTarget = storageSelector.select(bucketKey = bucketKey, prefixKey = prefixKey)
+
+        if (s3Properties.autoBucketsCreating.enabled) {
+            bucketProvisioner.ensureBucketExists(storageTarget.bucket)
+        }
 
         return files.map { file ->
             uploadValidator.validateZip(file)
@@ -49,43 +61,31 @@ class UploadService(
             val surnameAndName = extractSurnameAndName(originalFileName)
 
             val cleanedZipBytes = zipCleaner.cleanZip(file.bytes)
-            val objectKey = buildObjectKey(workName = workName, surnameAndName = surnameAndName)
 
-            putZipObject(objectKey = objectKey, zipBytes = cleanedZipBytes)
+            val objectKey =
+                objectKeyFactory.build(
+                    prefix = storageTarget.prefix,
+                    workName = workName,
+                    surnameName = surnameAndName,
+                )
+
+            val putObjectRequest =
+                PutObjectRequest
+                    .builder()
+                    .bucket(storageTarget.bucket)
+                    .key(objectKey)
+                    .contentType(ZIP_CONTENT_TYPE)
+                    .build()
+
+            s3Client.putObject(putObjectRequest, RequestBody.fromBytes(cleanedZipBytes))
 
             UploadResponse(
-                bucket = s3Properties.bucket,
+                bucket = storageTarget.bucket,
                 key = objectKey,
                 sizeBytes = cleanedZipBytes.size.toLong(),
             )
         }
     }
-
-    private fun buildObjectKey(
-        workName: String,
-        surnameAndName: String,
-    ): String =
-        objectKeyFactory.build(
-            prefix = s3Properties.prefix,
-            workName = workName,
-            surnameName = surnameAndName,
-        )
-
-    private fun putZipObject(
-        objectKey: String,
-        zipBytes: ByteArray,
-    ) {
-        val putObjectRequest = buildPutObjectRequest(objectKey)
-        s3Client.putObject(putObjectRequest, RequestBody.fromBytes(zipBytes))
-    }
-
-    private fun buildPutObjectRequest(objectKey: String): PutObjectRequest =
-        PutObjectRequest
-            .builder()
-            .bucket(s3Properties.bucket)
-            .key(objectKey)
-            .contentType(ZIP_CONTENT_TYPE)
-            .build()
 
     private fun extractSurnameAndName(originalFileName: String): String {
         val baseFileName =

@@ -4,14 +4,19 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
+import ru.itmo.plagiat.dto.exception.ApiException
 import ru.itmo.plagiat.dto.exception.ErrorResponse
-import ru.itmo.plagiat.dto.exception.InvalidUploadException
+
+const val ERROR_MESSAGE_BAD_REQUEST_DEFAULT = "Некорректный запрос"
 
 @RestControllerAdvice
-class ExceptionHandler {
-    @ExceptionHandler(InvalidUploadException::class)
-    fun handleInvalidUpload(ex: InvalidUploadException): ResponseEntity<ErrorResponse> =
+class ApiExceptionHandler {
+    @ExceptionHandler(ApiException::class)
+    fun handleApiException(ex: ApiException): ResponseEntity<ErrorResponse> =
         ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-            ErrorResponse(code = "invalid_upload", message = ex.message ?: "Некорректный запрос"),
+            ErrorResponse(
+                code = ex.code,
+                message = ex.message.ifBlank { ERROR_MESSAGE_BAD_REQUEST_DEFAULT },
+            ),
         )
 }
