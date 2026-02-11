@@ -1,4 +1,4 @@
-package ru.itmo.plagiat.service.helper
+package ru.itmo.plagiat.service.storage
 
 import org.springframework.stereotype.Component
 import software.amazon.awssdk.services.s3.S3Client

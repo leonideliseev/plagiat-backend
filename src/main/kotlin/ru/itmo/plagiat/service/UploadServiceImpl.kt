@@ -6,11 +6,11 @@ import ru.itmo.plagiat.configuration.S3Properties
 import ru.itmo.plagiat.dto.exception.InvalidUploadException
 import ru.itmo.plagiat.dto.server.UploadResponse
 import ru.itmo.plagiat.service.abstracts.UploadService
-import ru.itmo.plagiat.service.helper.BucketProvisioner
-import ru.itmo.plagiat.service.helper.ObjectKeyFactory
-import ru.itmo.plagiat.service.helper.StorageSelector
-import ru.itmo.plagiat.service.helper.UploadValidator
-import ru.itmo.plagiat.service.helper.ZipCleaner
+import ru.itmo.plagiat.service.storage.BucketProvisioner
+import ru.itmo.plagiat.service.storage.S3ObjectKeyFactory
+import ru.itmo.plagiat.service.storage.StorageSelector
+import ru.itmo.plagiat.service.validation.UploadValidator
+import ru.itmo.plagiat.service.zip.ZipCleaner
 import ru.itmo.plagiat.util.ERROR_MESSAGE_EMPTY_FILE_LIST
 import ru.itmo.plagiat.util.ERROR_MESSAGE_FILENAME_SHOULD_CONTAIN_SURNAME_AND_NAME
 import ru.itmo.plagiat.util.ERROR_MESSAGE_NO_FILENAME
@@ -32,7 +32,7 @@ private val PERSON_NAME_SEPARATOR_REGEX = Regex(PERSON_NAME_SEPARATOR_PATTERN)
 class UploadServiceImpl(
     private val s3Client: S3Client,
     private val s3Properties: S3Properties,
-    private val objectKeyFactory: ObjectKeyFactory,
+    private val s3ObjectKeyFactory: S3ObjectKeyFactory,
     private val uploadValidator: UploadValidator,
     private val zipCleaner: ZipCleaner,
     private val storageSelector: StorageSelector,
@@ -64,7 +64,7 @@ class UploadServiceImpl(
             val cleanedZipBytes = zipCleaner.cleanZip(file.bytes)
 
             val objectKey =
-                objectKeyFactory.build(
+                s3ObjectKeyFactory.build(
                     prefix = storageTarget.prefix,
                     workName = workName,
                     surnameName = surnameAndName,

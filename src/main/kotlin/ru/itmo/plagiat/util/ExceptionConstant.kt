@@ -8,4 +8,6 @@ const val ERROR_MESSAGE_CANNOT_READ_NAMES = "Не удалось прочита�
 const val ERROR_MESSAGE_EMPTY_FILE_LIST = "Список файлов пустой"
 const val ERROR_MESSAGE_FILENAME_SHOULD_CONTAIN_SURNAME_AND_NAME = "Имя файла должно содержать фамилию и имя"
 const val ERROR_MESSAGE_BUCKET_KEY_NOT_ALLOWED = "Недопустимый бакет"
-const val ERROR_MESSAGE_PREFIX_KEY_NOT_ALLOWED = "Недопустимый префикс" 
+const val ERROR_MESSAGE_PREFIX_KEY_NOT_ALLOWED = "Недопустимый префикс"
+
+
