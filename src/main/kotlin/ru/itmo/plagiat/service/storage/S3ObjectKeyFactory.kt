@@ -1,6 +1,7 @@
-package ru.itmo.plagiat.service.helper
+package ru.itmo.plagiat.service.storage
 
 import org.springframework.stereotype.Component
+import ru.itmo.plagiat.util.S3_KEY_SEPARATOR
 import java.time.Clock
 import java.time.Instant
 import java.time.ZoneOffset
@@ -9,7 +10,6 @@ import java.time.format.DateTimeFormatter
 private const val UNKNOWN_VALUE = "unknown"
 private const val UNDERSCORE = "_"
 private const val ZIP_EXTENSION = ".zip"
-private const val S3_KEY_SEPARATOR = "/"
 private const val TIMESTAMP_PATTERN = "yyyyMMdd_HHmmss_SSS"
 
 private val TIMESTAMP_FORMATTER: DateTimeFormatter =
@@ -22,7 +22,7 @@ private val FORBIDDEN_CHARS_REGEX = Regex("""[^\p{L}\p{N}_-]+""")
 private val MULTIPLE_UNDERSCORES_REGEX = Regex("""_+""")
 
 @Component
-class ObjectKeyFactory(
+class S3ObjectKeyFactory(
     private val clock: Clock,
 ) {
     fun build(

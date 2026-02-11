@@ -1,4 +1,4 @@
-package ru.itmo.plagiat.service.helper
+package ru.itmo.plagiat.service.validation
 
 import org.springframework.stereotype.Component
 import org.springframework.web.multipart.MultipartFile

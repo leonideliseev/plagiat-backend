@@ -134,8 +134,71 @@ app:
         - go
         - rs
         - cs
-        - txt
-        - md
+        - html
       special-names:
         - readme
         - license
+  ai-detection:
+    selection:
+      total-files: 7
+      score:
+        weight-bytes: 0.35
+        weight-lines: 0.65
+      reroll:
+        max-attempts: 7
+        min-lines: 20
+        min-bytes: 200
+        max-lines: 2000
+        max-bytes: 200000
+        skip-minified-js: true
+        minified:
+          max-average-line-length: 220
+          max-long-line-ratio: 0.35
+          long-line-threshold: 300
+      rules:
+        - name: backend-services
+          path-contains-any:
+            - "/service/"
+            - "/services/"
+            - "/usecase/"
+            - "/domain/"
+            - "/core/"
+            - "/rooms/"
+            - "/auth/"
+          take-largest: 2
+          take-random: 1
+
+        - name: backend-controllers
+          path-contains-any:
+            - "/controller/"
+            - "/handlers/"
+            - "/routes/"
+            - "/api/"
+          take-largest: 0
+          take-random: 1
+
+        - name: data-layer
+          path-contains-any:
+            - "/repository/"
+            - "/dao/"
+            - "/storage/"
+            - "/db/"
+          take-largest: 1
+          take-random: 0
+
+        - name: frontend
+          path-contains-any:
+            - "/frontend/"
+            - "/client/"
+            - "/web/"
+            - "/ui/"
+            - "/pages/"
+            - "/src/"
+          extensions-any:
+            - "html"
+            - "js"
+            - "ts"
+            - "jsx"
+            - "tsx"
+          take-largest: 0
+          take-random: 1

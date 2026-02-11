@@ -1,4 +1,4 @@
-package ru.itmo.plagiat.service.helper
+package ru.itmo.plagiat.service.storage
 
 import org.springframework.stereotype.Component
 import ru.itmo.plagiat.configuration.S3Properties
