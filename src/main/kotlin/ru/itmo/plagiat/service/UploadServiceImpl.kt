@@ -5,6 +5,7 @@ import org.springframework.web.multipart.MultipartFile
 import ru.itmo.plagiat.configuration.S3Properties
 import ru.itmo.plagiat.dto.exception.InvalidUploadException
 import ru.itmo.plagiat.dto.server.UploadResponse
+import ru.itmo.plagiat.service.abstracts.UploadService
 import ru.itmo.plagiat.service.helper.BucketProvisioner
 import ru.itmo.plagiat.service.helper.ObjectKeyFactory
 import ru.itmo.plagiat.service.helper.StorageSelector
@@ -28,7 +29,7 @@ private const val PERSON_NAME_SEPARATOR_PATTERN = """[ _]+"""
 private val PERSON_NAME_SEPARATOR_REGEX = Regex(PERSON_NAME_SEPARATOR_PATTERN)
 
 @Service
-class UploadService(
+class UploadServiceImpl(
     private val s3Client: S3Client,
     private val s3Properties: S3Properties,
     private val objectKeyFactory: ObjectKeyFactory,
@@ -36,8 +37,8 @@ class UploadService(
     private val zipCleaner: ZipCleaner,
     private val storageSelector: StorageSelector,
     private val bucketProvisioner: BucketProvisioner,
-) {
-    fun uploadWork(
+) : UploadService {
+    override fun uploadWorks(
         workName: String,
         files: List<MultipartFile>,
         bucketKey: String?,
