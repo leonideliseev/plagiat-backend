@@ -21,7 +21,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: app-server
+    container_name: plagiat-backend
     depends_on:
       minio:
         condition: service_healthy

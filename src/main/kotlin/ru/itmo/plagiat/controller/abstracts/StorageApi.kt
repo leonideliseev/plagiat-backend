@@ -14,7 +14,7 @@ import ru.itmo.plagiat.dto.server.UploadResponse
 
 interface StorageApi {
     @PostMapping(
-        value = ["/api/storage/{bucketKey}/{prefixKey}/{workName}/upload"],
+        value = ["/api/v1/storage/{bucketKey}/{prefixKey}/{workName}/upload"],
         consumes = [MediaType.MULTIPART_FORM_DATA_VALUE],
         produces = [MediaType.APPLICATION_JSON_VALUE],
     )
@@ -26,7 +26,7 @@ interface StorageApi {
     ): List<UploadResponse>
 
     @PostMapping(
-        value = ["/api/storage/{bucketKey}/{prefixKey}/{workName}/find"],
+        value = ["/api/v1/storage/{bucketKey}/{prefixKey}/{workName}/find"],
         consumes = [MediaType.APPLICATION_JSON_VALUE],
         produces = [MediaType.APPLICATION_JSON_VALUE],
     )
@@ -38,7 +38,7 @@ interface StorageApi {
     ): FindWorksResponse
 
     @PostMapping(
-        value = ["api/storage/{bucketKey}/{prefixKey}/{workName}/ai-check"],
+        value = ["/api/v1/storage/{bucketKey}/{prefixKey}/{workName}/ai-check"],
         consumes = [MediaType.APPLICATION_JSON_VALUE],
         produces = [MediaType.APPLICATION_JSON_VALUE],
     )

@@ -24,6 +24,10 @@ app:
       prefixKey: ${APP_S3_DEFAULT_PREFIX_KEY:works}
     autoBucketsCreating:
       enabled: ${APP_S3_AUTO_BUCKETS_CREATING_ENABLED:true}
+  files-analyzer:
+    base-url: ${APP_ANALYZER_BASE_URL:http://localhost:8000}
+    analyze-path: ${APP_ANALYZER_ANALYZE_PATH:/api/v1/analyze}
+    jobs-path: ${APP_ANALYZER_JOBS_PATH:/api/v1/jobs}
   zip-cleaner:
     delete:
       dirs:
