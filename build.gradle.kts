@@ -23,6 +23,7 @@ repositories {
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("software.amazon.awssdk:s3:2.25.66")
+    implementation("com.aventrix.jnanoid:jnanoid:2.0.0")
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")

@@ -14,16 +14,16 @@ import ru.itmo.plagiat.dto.server.CheckAiResponse
 import ru.itmo.plagiat.dto.server.FindWorksRequest
 import ru.itmo.plagiat.dto.server.FindWorksResponse
 import ru.itmo.plagiat.dto.server.UploadResponse
-import ru.itmo.plagiat.service.AiCheckService
+import ru.itmo.plagiat.service.AiCheckServiceImpl
 import ru.itmo.plagiat.service.abstracts.FindService
 import ru.itmo.plagiat.service.abstracts.UploadService
 
 @RestController
-@RequestMapping("/api/storage")
+@RequestMapping("/api/v1/storage")
 class StorageController(
     private val uploadService: UploadService,
     private val findService: FindService,
-    private val aiCheckService: AiCheckService,
+    private val aiCheckService: AiCheckServiceImpl,
 ) : StorageApi {
     @PostMapping(
         value = ["/{bucketKey}/{prefixKey}/{workName}/upload"],

@@ -5,6 +5,7 @@ data class CheckAiRequest(
 )
 
 data class CheckAiResponse(
+    val jobId: String,
     val bucket: String,
     val archiveKey: String?,
     val selectedFiles: List<SelectedArchiveFile>,
