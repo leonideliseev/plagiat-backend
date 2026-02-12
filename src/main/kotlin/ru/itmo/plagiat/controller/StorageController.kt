@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestPart
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.multipart.MultipartFile
 import ru.itmo.plagiat.controller.abstracts.StorageApi
+import ru.itmo.plagiat.dto.client.TemplateCreateResponse
 import ru.itmo.plagiat.dto.server.CheckAiRequest
 import ru.itmo.plagiat.dto.server.CheckAiResponse
 import ru.itmo.plagiat.dto.server.FindWorksRequest
@@ -16,6 +17,7 @@ import ru.itmo.plagiat.dto.server.FindWorksResponse
 import ru.itmo.plagiat.dto.server.UploadResponse
 import ru.itmo.plagiat.service.AiCheckServiceImpl
 import ru.itmo.plagiat.service.abstracts.FindService
+import ru.itmo.plagiat.service.abstracts.TemplateCreatorService
 import ru.itmo.plagiat.service.abstracts.UploadService
 
 @RestController
@@ -24,6 +26,7 @@ class StorageController(
     private val uploadService: UploadService,
     private val findService: FindService,
     private val aiCheckService: AiCheckServiceImpl,
+    private val templateCreatorService: TemplateCreatorService,
 ) : StorageApi {
     @PostMapping(
         value = ["/{bucketKey}/{prefixKey}/{workName}/upload"],
@@ -77,5 +80,23 @@ class StorageController(
             prefixKey = prefixKey,
             workName = workName,
             fileNameQueries = request.fileNameQueries,
+        )
+
+    @PostMapping(
+        value = ["/{bucketKey}/{prefixKey}/{workName}/template/create"],
+        consumes = [MediaType.MULTIPART_FORM_DATA_VALUE],
+        produces = [MediaType.APPLICATION_JSON_VALUE],
+    )
+    override fun createTemplate(
+        @PathVariable bucketKey: String,
+        @PathVariable prefixKey: String,
+        @PathVariable workName: String,
+        @RequestPart("file") file: MultipartFile,
+    ): TemplateCreateResponse =
+        templateCreatorService.createTemplate(
+            technicalSpecification = file,
+            bucketKey = bucketKey,
+            prefixKey = prefixKey,
+            workName = workName,
         )
 }

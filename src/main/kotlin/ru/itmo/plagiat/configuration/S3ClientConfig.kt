@@ -1,8 +1,7 @@
-package ru.itmo.plagiat.client
+package ru.itmo.plagiat.configuration
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import ru.itmo.plagiat.configuration.S3Properties
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider
 import software.amazon.awssdk.regions.Region
