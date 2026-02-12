@@ -9,12 +9,12 @@ import ru.itmo.plagiat.controller.abstracts.JobApi
 import ru.itmo.plagiat.service.abstracts.JobService
 
 @RestController
-@RequestMapping("/api/v1/jobs")
+@RequestMapping("/api/v1")
 class JobController(
     private val jobService: JobService,
 ) : JobApi {
     @GetMapping(
-        value = ["/{jobId}"],
+        value = ["/jobs/{jobId}"],
         produces = [MediaType.APPLICATION_JSON_VALUE],
     )
     override fun getJob(

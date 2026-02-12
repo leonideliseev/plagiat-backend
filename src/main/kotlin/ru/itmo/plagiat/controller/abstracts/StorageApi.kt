@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestPart
 import org.springframework.web.multipart.MultipartFile
+import ru.itmo.plagiat.dto.client.TemplateCreateResponse
 import ru.itmo.plagiat.dto.server.CheckAiRequest
 import ru.itmo.plagiat.dto.server.CheckAiResponse
 import ru.itmo.plagiat.dto.server.FindWorksRequest
@@ -48,4 +49,16 @@ interface StorageApi {
         @PathVariable workName: String,
         @RequestBody request: CheckAiRequest,
     ): CheckAiResponse
+
+    @PostMapping(
+        value = ["/api/v1/storage/{bucketKey}/{prefixKey}/{workName}/template/create"],
+        consumes = [MediaType.MULTIPART_FORM_DATA_VALUE],
+        produces = [MediaType.APPLICATION_JSON_VALUE],
+    )
+    fun createTemplate(
+        @PathVariable bucketKey: String,
+        @PathVariable prefixKey: String,
+        @PathVariable workName: String,
+        @RequestPart("file") file: MultipartFile,
+    ): TemplateCreateResponse
 }
