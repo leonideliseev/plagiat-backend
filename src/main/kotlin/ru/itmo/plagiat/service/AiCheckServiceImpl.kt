@@ -31,7 +31,7 @@ class AiCheckServiceImpl(
     private val nanoIdGenerator: NanoIdGenerator,
     private val filesAnalyzerClient: FilesAnalyzerClient,
 ) : AiCheckService {
-    override fun aiCheck(
+    override fun createJob(
         bucketKey: String,
         prefixKey: String,
         workName: String,

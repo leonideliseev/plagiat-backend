@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile
 import ru.itmo.plagiat.configuration.TemplateCreatorProperties
 
 private const val MULTIPART_FIELD_FILE = "file"
-private const val MULTIPART_FIELD_STORAGE_PATH = "storagePath"
+private const val MULTIPART_FIELD_STORAGE_PATH = "storage_path"
 private const val DEFAULT_FILE_NAME = "technical-specification.txt"
 
 @Component
