@@ -5,8 +5,9 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
-import ru.itmo.plagiat.dto.server.CheckAiRequest
-import ru.itmo.plagiat.dto.server.CheckAiResponse
+import ru.itmo.plagiat.dto.server.CreateAiCheckTaskRequest
+import ru.itmo.plagiat.dto.server.CreateAiCheckTaskResponse
+import ru.itmo.plagiat.dto.server.GetAiCheckTaskResponse
 
 interface JobApi {
     @GetMapping(
@@ -15,7 +16,7 @@ interface JobApi {
     )
     fun getJob(
         @PathVariable jobId: String,
-    ): String
+    ): GetAiCheckTaskResponse
 
     @PostMapping(
         value = ["/api/v1/storage/{bucketKey}/{prefixKey}/{workName}/ai/check/jobs/create"],
@@ -26,6 +27,6 @@ interface JobApi {
         @PathVariable bucketKey: String,
         @PathVariable prefixKey: String,
         @PathVariable workName: String,
-        @RequestBody request: CheckAiRequest,
-    ): CheckAiResponse
+        @RequestBody request: CreateAiCheckTaskRequest,
+    ): CreateAiCheckTaskResponse
 }

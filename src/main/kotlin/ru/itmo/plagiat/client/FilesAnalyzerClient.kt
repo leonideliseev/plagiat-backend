@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component
 import org.springframework.web.client.RestClient
 import ru.itmo.plagiat.configuration.FilesAnalyzerProperties
 import ru.itmo.plagiat.dto.client.FilesAnalyzeRequest
+import ru.itmo.plagiat.dto.server.GetAiCheckTaskResponse
 
 @Component
 class FilesAnalyzerClient(
@@ -21,12 +22,11 @@ class FilesAnalyzerClient(
             .toBodilessEntity()
     }
 
-    fun getJob(jobId: String): String =
+    fun getJob(jobId: String): GetAiCheckTaskResponse =
         restClient
             .get()
             .uri(filesAnalyzerProperties.jobUrl(jobId))
             .accept(MediaType.APPLICATION_JSON)
             .retrieve()
-            .body(String::class.java)
-            ?: ""
+            .body(GetAiCheckTaskResponse::class.java)!!
 }

@@ -1,3 +1,5 @@
+version: "3.9"
+
 services:
   minio:
     image: minio/minio:latest
@@ -16,6 +18,8 @@ services:
       interval: 5s
       timeout: 3s
       retries: 20
+    networks:
+      - shared-net
 
   app:
     build:
@@ -29,6 +33,12 @@ services:
       - .env
     ports:
       - "${APP_HOST_PORT}:${APP_CONTAINER_PORT}"
+    networks:
+      - shared-net
 
 volumes:
   minio_data:
+
+networks:
+  shared-net:
+    external: true
