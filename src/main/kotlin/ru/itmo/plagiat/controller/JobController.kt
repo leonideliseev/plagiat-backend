@@ -8,8 +8,9 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import ru.itmo.plagiat.controller.abstracts.JobApi
-import ru.itmo.plagiat.dto.server.CheckAiRequest
-import ru.itmo.plagiat.dto.server.CheckAiResponse
+import ru.itmo.plagiat.dto.server.CreateAiCheckTaskRequest
+import ru.itmo.plagiat.dto.server.CreateAiCheckTaskResponse
+import ru.itmo.plagiat.dto.server.GetAiCheckTaskResponse
 import ru.itmo.plagiat.service.AiCheckServiceImpl
 import ru.itmo.plagiat.service.abstracts.JobService
 
@@ -25,7 +26,7 @@ class JobController(
     )
     override fun getJob(
         @PathVariable jobId: String,
-    ): String = jobService.getJob(jobId = jobId)
+    ): GetAiCheckTaskResponse = jobService.getJob(jobId = jobId)
 
     @PostMapping(
         value = ["/storage/{bucketKey}/{prefixKey}/{workName}/ai/check/jobs/create"],
@@ -36,8 +37,8 @@ class JobController(
         @PathVariable bucketKey: String,
         @PathVariable prefixKey: String,
         @PathVariable workName: String,
-        @RequestBody request: CheckAiRequest,
-    ): CheckAiResponse =
+        @RequestBody request: CreateAiCheckTaskRequest,
+    ): CreateAiCheckTaskResponse =
         aiCheckService.createJob(
             bucketKey = bucketKey,
             prefixKey = prefixKey,
