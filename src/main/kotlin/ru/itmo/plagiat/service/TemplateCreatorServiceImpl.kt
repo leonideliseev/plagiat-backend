@@ -11,7 +11,7 @@ import ru.itmo.plagiat.service.storage.StorageSelector
 private const val PATH_SEPARATOR = "/"
 
 @Service
-class AiTemplateCreatorServiceImpl(
+class TemplateCreatorServiceImpl(
     private val storageSelector: StorageSelector,
     private val aiTemplateCreatorClient: TemplateCreatorClient,
 ) : TemplateCreatorService {
@@ -26,9 +26,7 @@ class AiTemplateCreatorServiceImpl(
         val normalizedWorkName = normalizePathPart(workName, "workName")
 
         val storagePath =
-            listOf(bucketKey, prefixKey, normalizedWorkName)
-                .map { it.trim() }
-                .joinToString(PATH_SEPARATOR)
+            listOf(bucketKey, prefixKey, normalizedWorkName).joinToString(PATH_SEPARATOR) { it.trim() }
 
         aiTemplateCreatorClient.createTemplate(
             technicalSpecification = technicalSpecification,

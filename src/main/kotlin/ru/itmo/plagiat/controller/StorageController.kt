@@ -10,12 +10,9 @@ import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.multipart.MultipartFile
 import ru.itmo.plagiat.controller.abstracts.StorageApi
 import ru.itmo.plagiat.dto.client.TemplateCreateResponse
-import ru.itmo.plagiat.dto.server.CheckAiRequest
-import ru.itmo.plagiat.dto.server.CheckAiResponse
 import ru.itmo.plagiat.dto.server.FindWorksRequest
 import ru.itmo.plagiat.dto.server.FindWorksResponse
 import ru.itmo.plagiat.dto.server.UploadResponse
-import ru.itmo.plagiat.service.AiCheckServiceImpl
 import ru.itmo.plagiat.service.abstracts.FindService
 import ru.itmo.plagiat.service.abstracts.TemplateCreatorService
 import ru.itmo.plagiat.service.abstracts.UploadService
@@ -25,7 +22,6 @@ import ru.itmo.plagiat.service.abstracts.UploadService
 class StorageController(
     private val uploadService: UploadService,
     private val findService: FindService,
-    private val aiCheckService: AiCheckServiceImpl,
     private val templateCreatorService: TemplateCreatorService,
 ) : StorageApi {
     @PostMapping(
@@ -65,25 +61,7 @@ class StorageController(
         )
 
     @PostMapping(
-        value = ["/{bucketKey}/{prefixKey}/{workName}/ai-check"],
-        consumes = [MediaType.APPLICATION_JSON_VALUE],
-        produces = [MediaType.APPLICATION_JSON_VALUE],
-    )
-    override fun checkAi(
-        @PathVariable bucketKey: String,
-        @PathVariable prefixKey: String,
-        @PathVariable workName: String,
-        @RequestBody request: CheckAiRequest,
-    ): CheckAiResponse =
-        aiCheckService.aiCheck(
-            bucketKey = bucketKey,
-            prefixKey = prefixKey,
-            workName = workName,
-            fileNameQueries = request.fileNameQueries,
-        )
-
-    @PostMapping(
-        value = ["/{bucketKey}/{prefixKey}/{workName}/template/create"],
+        value = ["/{bucketKey}/{prefixKey}/{workName}/templates/create"],
         consumes = [MediaType.MULTIPART_FORM_DATA_VALUE],
         produces = [MediaType.APPLICATION_JSON_VALUE],
     )

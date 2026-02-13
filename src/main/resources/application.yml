@@ -26,7 +26,7 @@ app:
       enabled: ${APP_S3_AUTO_BUCKETS_CREATING_ENABLED:true}
   ai-template-creator:
     base-url: ${APP_AI_TEMPLATE_CREATOR_BASE_URL:http://localhost:8082}
-    create-path: ${APP_AI_TEMPLATE_CREATOR_CREATE_PATH:/api/v1/ai-template/create}
+    create-path: ${APP_AI_TEMPLATE_CREATOR_CREATE_PATH:/api/v1/templates/create}
   files-analyzer:
     base-url: ${APP_ANALYZER_BASE_URL:http://localhost:8000}
     analyze-path: ${APP_ANALYZER_ANALYZE_PATH:/api/v1/analyze}

@@ -3,7 +3,7 @@ package ru.itmo.plagiat.service.abstracts
 import ru.itmo.plagiat.dto.server.CheckAiResponse
 
 interface AiCheckService {
-    fun aiCheck(
+    fun createJob(
         bucketKey: String,
         prefixKey: String,
         workName: String,

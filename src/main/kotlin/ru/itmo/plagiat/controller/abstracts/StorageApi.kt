@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestPart
 import org.springframework.web.multipart.MultipartFile
 import ru.itmo.plagiat.dto.client.TemplateCreateResponse
-import ru.itmo.plagiat.dto.server.CheckAiRequest
-import ru.itmo.plagiat.dto.server.CheckAiResponse
 import ru.itmo.plagiat.dto.server.FindWorksRequest
 import ru.itmo.plagiat.dto.server.FindWorksResponse
 import ru.itmo.plagiat.dto.server.UploadResponse
@@ -37,18 +35,6 @@ interface StorageApi {
         @PathVariable workName: String,
         @RequestBody request: FindWorksRequest,
     ): FindWorksResponse
-
-    @PostMapping(
-        value = ["/api/v1/storage/{bucketKey}/{prefixKey}/{workName}/ai-check"],
-        consumes = [MediaType.APPLICATION_JSON_VALUE],
-        produces = [MediaType.APPLICATION_JSON_VALUE],
-    )
-    fun checkAi(
-        @PathVariable bucketKey: String,
-        @PathVariable prefixKey: String,
-        @PathVariable workName: String,
-        @RequestBody request: CheckAiRequest,
-    ): CheckAiResponse
 
     @PostMapping(
         value = ["/api/v1/storage/{bucketKey}/{prefixKey}/{workName}/template/create"],
