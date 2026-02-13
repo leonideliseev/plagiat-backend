@@ -2,11 +2,11 @@ package ru.itmo.plagiat.dto.server
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-data class CreateAiCheckTaskRequest(
+data class CreateAiCheckJobRequest(
     val fileNameQueries: List<String>?,
 )
 
-data class CreateAiCheckTaskResponse(
+data class CreateAiCheckJobResponse(
     val jobId: String,
     val bucket: String,
     val archiveKey: String?,
@@ -19,7 +19,7 @@ data class SelectedArchiveFile(
     val linesCount: Int,
 )
 
-data class GetAiCheckTaskResponse(
+data class GetAiCheckJobResponse(
     val id: String,
     val status: String,
     val verdict: Map<String, VerdictEntry>?,

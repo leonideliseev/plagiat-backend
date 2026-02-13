@@ -24,6 +24,10 @@ app:
       prefixKey: ${APP_S3_DEFAULT_PREFIX_KEY:works}
     autoBucketsCreating:
       enabled: ${APP_S3_AUTO_BUCKETS_CREATING_ENABLED:true}
+  plagiat-checker:
+    base-url: ${APP_PLAGIAT_CHECKER_BASE_URL:http://localhost:8081}
+    check-path:  ${APP_PLAGIAT_CHECKER_CHECK_PATH:/api/v1/check}
+    jobs-path: ${APP_PLAGIAT_CHECKER_JOBS_PATH:/api/v1/jobs}
   ai-template-creator:
     base-url: ${APP_TEMPLATE_CREATOR_BASE_URL:http://localhost:8082}
     create-path: ${APP_AI_TEMPLATE_CREATOR_CREATE_PATH:/api/v1/templates/create}
