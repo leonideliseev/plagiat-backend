@@ -1,7 +1,10 @@
 package ru.itmo.plagiat.service.abstracts
 
-import ru.itmo.plagiat.dto.server.GetAiCheckTaskResponse
+import ru.itmo.plagiat.dto.server.GetAiCheckJobResponse
+import ru.itmo.plagiat.dto.server.GetPlagiatCheckJobResponse
 
 interface JobService {
-    fun getJob(jobId: String): GetAiCheckTaskResponse
+    fun getAiCheckJob(jobId: String): GetAiCheckJobResponse
+
+    fun getPlagiatCheckJob(jobId: String): GetPlagiatCheckJobResponse
 }

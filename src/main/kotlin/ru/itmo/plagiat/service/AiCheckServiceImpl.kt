@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service
 import ru.itmo.plagiat.client.FilesAnalyzerClient
 import ru.itmo.plagiat.dto.client.AnalyzeFile
 import ru.itmo.plagiat.dto.client.FilesAnalyzeRequest
-import ru.itmo.plagiat.dto.server.CreateAiCheckTaskResponse
+import ru.itmo.plagiat.dto.server.CreateAiCheckJobResponse
 import ru.itmo.plagiat.dto.server.SelectedArchiveFile
 import ru.itmo.plagiat.service.abstracts.AiCheckService
 import ru.itmo.plagiat.service.abstracts.FindService
@@ -36,7 +36,7 @@ class AiCheckServiceImpl(
         prefixKey: String,
         workName: String,
         fileNameQueries: List<String>?,
-    ): CreateAiCheckTaskResponse {
+    ): CreateAiCheckJobResponse {
         val findResponse =
             findService.findWorks(
                 bucketKey = bucketKey,
@@ -53,7 +53,7 @@ class AiCheckServiceImpl(
             }
 
         if (firstZipKey == null) {
-            return CreateAiCheckTaskResponse(
+            return CreateAiCheckJobResponse(
                 jobId = EMPTY_JOB_ID,
                 bucket = bucket,
                 archiveKey = null,
@@ -79,7 +79,7 @@ class AiCheckServiceImpl(
                 pickedFiles = pickedFiles,
             )
 
-            return CreateAiCheckTaskResponse(
+            return CreateAiCheckJobResponse(
                 jobId = jobId,
                 bucket = bucket,
                 archiveKey = firstZipKey,
