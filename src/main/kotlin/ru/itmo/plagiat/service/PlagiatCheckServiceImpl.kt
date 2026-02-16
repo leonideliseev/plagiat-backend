@@ -29,7 +29,7 @@ class PlagiatCheckServiceImpl(
                 fileNameQueries = fileNameQueries,
             )
 
-        val jobId = nanoIdGenerator.randomId()
+        val jobId = nanoIdGenerator.randomUuidString()
 
         plagiatCheckerClient.check(
             PlagiatCheckerRequest(
